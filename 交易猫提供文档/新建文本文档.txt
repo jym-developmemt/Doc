@@ -1,0 +1,10 @@
+账号:tb007186956
+appkey:33614067
+appsecret:509582c40e9ae70604bb17f59e374e68
+应用授权等级:2
+回调URL:open.taobao.com
+
+
+常用工具
+#快速用户授权工具（开发阶段）
+https://open.taobao.com/docV3.htm?spm=a219a.15212433.0.0.3617669ayNG1i0&docId=1&docType=17

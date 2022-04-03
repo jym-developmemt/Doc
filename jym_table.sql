@@ -1,131 +1,143 @@
 --
---Åú´¦Àí¼ÇÂ¼±í
+--æ‰¹å¤„ç†è®°å½•è¡¨
 --
-DROP TABLE IF EXISTS `jym_m_batch`; 
-
-CREATE TABLE `jym_m_batch` ( 
-    `entity_id` int (10) NOT NULL AUTO_INCREMENT
-    , `batch_id` bigint (20) DEFAULT NULL COMMENT 'ÉÌÆ··¢²¼Åú´ÎID'
-    , `external_batch_id` varchar (50) NOT NULL COMMENT 'Íâ²¿Åú´ÎID'
-    , `succeed` tinyint(1) DEFAULT NULL COMMENT 'ÇëÇóÅú´¦Àí½á¹û'
-    , `product_cnt` int (10) DEFAULT NULL COMMENT '·¢²¼ÉÌÆ·¼şÊı'
-    , `state_code` varchar (25) DEFAULT NULL COMMENT 'ÇëÇó·µ»Ø×´Ì¬Âë'
-    , `extra_err_msg` varchar (255) DEFAULT NULL COMMENT 'ÇëÇó·µ»Ø´íÎóĞÅÏ¢'
-    , `method_id` varchar (100) NOT NULL COMMENT 'API½Ó¿ÚID'
-    , `status` int (10) DEFAULT NULL COMMENT 'ÈÎÎñ×´Ì¬'
+DROP TABLE IF EXISTS `jym_m_batch_hd`; 
+CREATE TABLE `jym_m_batch_hd` ( 
+    `external_batch_id` nvarchar(64) NOT NULL COMMENT 'å¤–éƒ¨æ‰¹æ¬¡ID'
+    , `batch_id` bigint(20) DEFAULT NULL COMMENT 'å•†å“å‘å¸ƒæ‰¹æ¬¡ID'
+    , `succeed` tinyint(1) DEFAULT NULL COMMENT 'è¯·æ±‚æ‰¹å¤„ç†ç»“æœ'
+    , `product_cnt` int(10) DEFAULT NULL COMMENT 'å‘å¸ƒå•†å“ä»¶æ•°'
+    , `state_code` nvarchar(25) DEFAULT NULL COMMENT 'è¯·æ±‚è¿”å›çŠ¶æ€ç '
+    , `extra_err_msg` nvarchar(255) DEFAULT NULL COMMENT 'è¯·æ±‚è¿”å›é”™è¯¯ä¿¡æ¯'
+    , `method_id` nvarchar(100) NOT NULL COMMENT 'APIæ¥å£ID'
+    , `status` int(10) DEFAULT NULL COMMENT 'ä»»åŠ¡çŠ¶æ€'
+    , `reason` nvarchar(255) DEFAULT NULL COMMENT 'é”™è¯¯åŸå› '
     , `create_at` timestamp NULL DEFAULT NULL
     , `update_at` timestamp NULL DEFAULT NULL
-    , PRIMARY KEY (`entity_id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'Åú´¦Àí¼ÇÂ¼±í'; 
+    , PRIMARY KEY (`external_batch_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'æ‰¹å¤„ç†è®°å½•è¡¨'; 
 
 --
---API½Ó¿Ú±í
+--æ‰¹å¤„ç†æ˜ç»†è¡¨
+--
+DROP TABLE IF EXISTS `jym_m_batch_dtl`;
+CREATE TABLE `jym_m_batch_dtl` (
+    `external_batch_id` nvarchar(64) NOT NULL COMMENT 'å¤–éƒ¨æ‰¹æ¬¡ID'
+    , `external_goods_id` nvarchar(64) NOT NULL COMMENT 'å¤–éƒ¨å•†å“ID'
+    , `goods_id` nvarchar(20) DEFAULT NULL COMMENT 'å•†å“ID'
+    , `status` int(10) NOT NULL COMMENT 'å­ä»»åŠ¡çŠ¶æ€'
+    , `reason` nvarchar(255) DEFAULT NULL COMMENT 'å­ä»»åŠ¡çŠ¶æ€äº§ç”ŸåŸå› '
+    , `goods_status` int(4) DEFAULT NULL COMMENT 'å•†å“å¤„ç†çŠ¶æ€'
+    , `create_at` timestamp NULL DEFAULT NULL
+    , `update_at` timestamp NULL DEFAULT NULL
+    , PRIMARY KEY (`external_batch_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'æ‰¹å¤„ç†æ˜ç»†è¡¨'; 
+
+--
+--APIæ¥å£è¡¨
 --
 DROP TABLE IF EXISTS `jym_f_api_method`; 
-
 CREATE TABLE `jym_f_api_method` ( 
-    `entity_id` int (10) NOT NULL AUTO_INCREMENT
-    , `method` varchar (100) NOT NULL COMMENT 'API½Ó¿ÚÃû³Æ'
-    , `description` varchar (255) NOT NULL COMMENT '½Ó¿ÚÃèÊö'
+    `entity_id` nvarchar(64) NOT NULL
+    , `method` nvarchar(100) NOT NULL COMMENT 'APIæ¥å£åç§°'
+    , `description` nvarchar(255) NOT NULL COMMENT 'æ¥å£æè¿°'
     , PRIMARY KEY (`entity_id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'API½Ó¿Ú±í'; 
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'APIæ¥å£è¡¨'; 
 
 LOCK TABLES `jym_f_api_method` WRITE;
-INSERT INTO `jym_f_api_method` VALUES (1, 'alibaba.jym.item.external.goods.batch.modifyprice', '½»Ò×Ã¨Íâ²¿ÉÌ¼ÒÅúÁ¿ÉÌÆ·¸Ä¼Û½Ó¿Ú'), (2, 'alibaba.jym.item.external.goods.batch.onsale', '½»Ò×Ã¨Íâ²¿ÉÌ¼ÒÅúÁ¿ÉÏ¼ÜÉÌÆ·½Ó¿Ú'), ( 3, 'alibaba.jym.item.external.goods.batchtask.query', '½»Ò×Ã¨Íâ²¿ÉÌ¼Ò²éÑ¯ÉÌÆ·ÅúÁ¿ÈÎÎñ½Ó¿Ú'), ( 4, 'alibaba.jym.item.external.goods.detail.query', '½»Ò×Ã¨Íâ²¿ÉÌ¼ÒÉÌÆ·ÏêÇé²éÑ¯½Ó¿Ú'), ( 5, 'alibaba.jym.item.external.goods.status.batch.query', '½»Ò×Ã¨Íâ²¿ÉÌ¼ÒÉÌÆ·×´Ì¬ÅúÁ¿²éÑ¯½Ó¿Ú'), ( 6, 'alibaba.jym.item.external.goods.batch.offsale', '½»Ò×Ã¨Íâ²¿ÉÌ¼ÒÅúÁ¿ÏÂ¼ÜÉÌÆ·½Ó¿Ú'), ( 7, 'alibaba.jym.item.external.goods.batch.publish', '½»Ò×Ã¨Íâ²¿ÉÌ¼ÒÅúÁ¿·¢²¼ÉÌÆ·½Ó¿Ú'); 
+INSERT INTO `jym_f_api_method` VALUES ('1', 'alibaba.jym.item.external.goods.batch.modifyprice', 'äº¤æ˜“çŒ«å¤–éƒ¨å•†å®¶æ‰¹é‡å•†å“æ”¹ä»·æ¥å£'), ('2', 'alibaba.jym.item.external.goods.batch.onsale', 'äº¤æ˜“çŒ«å¤–éƒ¨å•†å®¶æ‰¹é‡ä¸Šæ¶å•†å“æ¥å£'), ('3', 'alibaba.jym.item.external.goods.batchtask.query', 'äº¤æ˜“çŒ«å¤–éƒ¨å•†å®¶æŸ¥è¯¢å•†å“æ‰¹é‡ä»»åŠ¡æ¥å£'), ('4', 'alibaba.jym.item.external.goods.detail.query', 'äº¤æ˜“çŒ«å¤–éƒ¨å•†å®¶å•†å“è¯¦æƒ…æŸ¥è¯¢æ¥å£'), ('5', 'alibaba.jym.item.external.goods.status.batch.query', 'äº¤æ˜“çŒ«å¤–éƒ¨å•†å®¶å•†å“çŠ¶æ€æ‰¹é‡æŸ¥è¯¢æ¥å£'), ('6', 'alibaba.jym.item.external.goods.batch.offsale', 'äº¤æ˜“çŒ«å¤–éƒ¨å•†å®¶æ‰¹é‡ä¸‹æ¶å•†å“æ¥å£'), ('7', 'alibaba.jym.item.external.goods.batch.publish', 'äº¤æ˜“çŒ«å¤–éƒ¨å•†å®¶æ‰¹é‡å‘å¸ƒå•†å“æ¥å£'); 
 UNLOCK TABLES; 
 
 --
---ÉÌÆ·ÏêÏ¸±í
+--å•†å“è¯¦ç»†è¡¨
 --
 DROP TABLE IF EXISTS `jym_m_goods_entity`; 
-
 CREATE TABLE `jym_m_goods_entity` ( 
-    `entity_id` int (10) NOT NULL AUTO_INCREMENT
-    , `goods_id` bigint (20) DEFAULT NULL COMMENT '½»Ò×Ã¨ÉÌÆ·ID'
-    , `external_goods_id` varchar (50) NOT NULL COMMENT 'Íâ²¿ÉÌÆ·ID'
-    , `external_batch_id` varchar (50) NOT NULL COMMENT 'Íâ²¿Åú´ÎID'
-    , `title` varchar (30) NOT NULL COMMENT 'ÉÌÆ·±êÌâ'
-    , `price` varchar (20) NOT NULL COMMENT '¼Û¸ñ'
-    , `storage` int (10) NOT NULL COMMENT '¿â´æ'
-    , `description` varchar (400) NOT NULL COMMENT 'ÉÌÆ·ÃèÊö'
-    , `server_info_id` int(10) NOT NULL COMMENT ''
-    , `support_retrieve_compensation` tinyint(1) NOT NULL COMMENT 'ÊÇ·ñÖ§³ÖÕÒ»Ø°üÅâ'
-    , `can_bargain` tinyint(1) NOT NULL COMMENT 'ÊÇ·ñÖ§³ÖÒé¼Û'
-    , `status` int (4) DEFAULT NULL COMMENT 'ÉÌÆ·´¦Àí×´Ì¬'
-    , `good_state` int (4) DEFAULT NULL COMMENT 'ÉÌÆ·Ëù´¦×´Ì¬'
-    , `sub_batch_id` bigint (20) DEFAULT NULL COMMENT 'ÉÌÆ·ÈÎÎñid'
-    , `reason` varchar (255) DEFAULT NULL COMMENT '×ÓÈÎÎñ×´Ì¬²úÉúÔ­Òò'
+    `external_goods_id` nvarchar(64) NOT NULL COMMENT 'å¤–éƒ¨å•†å“ID'
+    , `title` nvarchar(15) NOT NULL COMMENT 'å•†å“æ ‡é¢˜'
+    , `price` nvarchar(10) NOT NULL COMMENT 'ä»·æ ¼'
+    , `storage` int(10) NOT NULL COMMENT 'åº“å­˜'
+    , `description` nvarchar(200) NOT NULL COMMENT 'å•†å“æè¿°'
+    , `server_info_id` nvarchar(64) NOT NULL COMMENT ''
+    , `support_retrieve_compensation` tinyint(1) NOT NULL COMMENT 'æ˜¯å¦æ”¯æŒæ‰¾å›åŒ…èµ”'
+    , `can_bargain` tinyint(1) NOT NULL COMMENT 'æ˜¯å¦æ”¯æŒè®®ä»·'
     , `create_at` timestamp NULL DEFAULT NULL
     , `update_at` timestamp NULL DEFAULT NULL
-    , PRIMARY KEY (`entity_id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'ÉÌÆ·ÏêÏ¸±í'; 
-
+    , PRIMARY KEY (`external_goods_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'å•†å“è¯¦ç»†è¡¨'; 
+    
 
 --
---ÉÌÆ·Æ½Ì¨ĞÅÏ¢±í
+--å•†å“å¹³å°ä¿¡æ¯è¡¨
 --
 DROP TABLE IF EXISTS `jym_f_server_info`; 
-
 CREATE TABLE `jym_f_server_info` ( 
-    `entity_id` int(10) NOT NULL AUTO_INCREMENT
-    , `system` varchar(10) DEFAULT NULL COMMENT 'ÏµÍ³'
-    , `good_type` varchar (20) DEFAULT NULL COMMENT 'ÉÌÆ·ÀàĞÍ'
-    , `cid` bigint(20) DEFAULT NULL COMMENT ''
-    , `first_category_id` int(10) NOT NULL COMMENT 'Ò»¼¶ÀàÄ¿ID'
-    , `first_category_name` varchar(20) DEFAULT NULL COMMENT 'Ò»¼¶ÀàÄ¿Ãû³Æ'
-    , `second_category_id` bigint(20) NOT NULL COMMENT '¶ş¼¶ÀàÄ¿ID'
-    , `second_category_name` varchar(20) DEFAULT NULL COMMENT '¶ş¼¶ÀàÄ¿Ãû³Æ'
-    , `latform_id` int(10) NOT NULL COMMENT 'Æ½Ì¨id'
-    , `client_id` bigint(20) NOT NULL COMMENT '¿Í»§¶Ëid'
-    , `game_id` int(10) NOT NULL COMMENT 'ÓÎÏ·id'
-    , `server_id` bigint(20) NOT NULL COMMENT '·şÎñÆ÷id'
-    , `server_name` varchar(20) NOT NULL COMMENT '·şÎñÆ÷Ãû³Æ'
+    `entity_id` nvarchar(64) NOT NULL
+    , `system` nvarchar(10) DEFAULT NULL COMMENT 'ç³»ç»Ÿ'
+    , `good_type` nvarchar(20) DEFAULT NULL COMMENT 'å•†å“ç±»å‹'
+    , `cid` nvarchar(20) DEFAULT NULL COMMENT ''
+    , `first_category_id` nvarchar(20) NOT NULL COMMENT 'ä¸€çº§ç±»ç›®ID'
+    , `first_category_name` nvarchar(50) DEFAULT NULL COMMENT 'ä¸€çº§ç±»ç›®åç§°'
+    , `second_category_id` nvarchar(20) NOT NULL COMMENT 'äºŒçº§ç±»ç›®ID'
+    , `second_category_name` nvarchar(50) DEFAULT NULL COMMENT 'äºŒçº§ç±»ç›®åç§°'
+    , `latform_id` nvarchar(10) NOT NULL COMMENT 'å¹³å°id'
+    , `client_id` nvarchar(20) NOT NULL COMMENT 'å®¢æˆ·ç«¯id'
+    , `game_id` nvarchar(10) NOT NULL COMMENT 'æ¸¸æˆid'
+    , `server_id` nvarchar(20) NOT NULL COMMENT 'æœåŠ¡å™¨id'
+    , `server_name` nvarchar(50) NOT NULL COMMENT 'æœåŠ¡å™¨åç§°'
     , PRIMARY KEY (`entity_id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'ÉÌÆ·Æ½Ì¨ĞÅÏ¢±í'; 
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'å•†å“å¹³å°ä¿¡æ¯è¡¨'; 
 
 LOCK TABLES `jym_f_server_info` WRITE;
-INSERT INTO `jym_f_server_info` VALUES(1, '°²×¿', 'ßÙÁ¨ßÙÁ¨¡¾ÓÅÖÊÉÌ¼Ò¡¿', 1642583177628183, 1, NULL, 1642583177628183, NULL, 2, 1470047035887265, 1009609, 1580902730218531, 'Í¨ÓÃ·şÎñÆ÷'), (2, '°²×¿', 'ßÙÁ¨ßÙÁ¨¡¾ÓÅÖÊÉÌ¼Ò¡¿', 1642583177628183, 1, NULL, 1642583177628183, NULL, 2, 1470047035887265, 1009609, 1580896125355665, 'ĞÂÇøÔ¤ÊÛ'), (3, '°²×¿', '¹Ù·½ÕÊºÅ¡¾ÓÅÖÊÉÌ¼Ò¡¿', 1642583217534208, 1, NULL, 1642583217534208, NULL, 2, 1475997234386789, 1009609, 1580902730218531, 'Í¨ÓÃ·şÎñÆ÷'), (4, '°²×¿', 'TapÕÊºÅ-ÓÅÖÊÉÌ¼Ò', 1642583287483026, 1, NULL, 1642583287483026, NULL, 2, 1580902730218531, 1009609, 1580902730218531, 'Í¨ÓÃ·şÎñÆ÷'), (5, 'Æ»¹û', '¹Ù·½ÕÊºÅ¡¾ÓÅÖÊÉÌ¼Ò¡¿', 1642583633272220, 1, NULL, 1642583633272220, NULL, 3, 1470047031112667, 1009609, 1580902730218531, 'Í¨ÓÃ·şÎñÆ÷');
+INSERT INTO `jym_f_server_info` VALUES(1, 'å®‰å“', 'å“”å“©å“”å“©ã€ä¼˜è´¨å•†å®¶ã€‘', 1642583177628183, 1, NULL, 1642583177628183, NULL, 2, 1470047035887265, 1009609, 1580902730218531, 'é€šç”¨æœåŠ¡å™¨'), (2, 'å®‰å“', 'å“”å“©å“”å“©ã€ä¼˜è´¨å•†å®¶ã€‘', 1642583177628183, 1, NULL, 1642583177628183, NULL, 2, 1470047035887265, 1009609, 1580896125355665, 'æ–°åŒºé¢„å”®'), (3, 'å®‰å“', 'å®˜æ–¹å¸å·ã€ä¼˜è´¨å•†å®¶ã€‘', 1642583217534208, 1, NULL, 1642583217534208, NULL, 2, 1475997234386789, 1009609, 1580902730218531, 'é€šç”¨æœåŠ¡å™¨'), (4, 'å®‰å“', 'Tapå¸å·-ä¼˜è´¨å•†å®¶', 1642583287483026, 1, NULL, 1642583287483026, NULL, 2, 1580902730218531, 1009609, 1580902730218531, 'é€šç”¨æœåŠ¡å™¨'), (5, 'è‹¹æœ', 'å®˜æ–¹å¸å·ã€ä¼˜è´¨å•†å®¶ã€‘', 1642583633272220, 1, NULL, 1642583633272220, NULL, 3, 1470047031112667, 1009609, 1580902730218531, 'é€šç”¨æœåŠ¡å™¨');
 UNLOCK TABLES;
 
 --
---Âô¼ÒÕËºÅĞÅÏ¢ÉÌÆ·ÊôĞÔ±í
+--å–å®¶è´¦å·ä¿¡æ¯å•†å“å±æ€§è¡¨
 --
 DROP TABLE IF EXISTS `jym_b_seller_goods_property`; 
-
 CREATE TABLE `jym_b_seller_goods_property` ( 
-    `entity_id` int (12) NOT NULL AUTO_INCREMENT
-    , `external_goods_id` varchar (50) NOT NULL COMMENT 'Íâ²¿ÉÌÆ·ID'
-    , `property_id` bigint (20) NOT NULL COMMENT 'ÊôĞÔid'
-    , `value_id` bigint (20) NOT NULL COMMENT 'ÊôĞÔÖµid'
-    , `value` varchar (50) DEFAULT NULL COMMENT 'ÊôĞÔÖµ'
+    `entity_id` int(10) NOT NULL AUTO_INCREMENT
+    , `external_goods_id` nvarchar(64) NOT NULL COMMENT 'å¤–éƒ¨å•†å“ID'
+    , `property_id` nvarchar(20) NOT NULL COMMENT 'å±æ€§id'
+    , `value_id` nvarchar(20) NOT NULL COMMENT 'å±æ€§å€¼id'
+    , `value` nvarchar(50) DEFAULT NULL COMMENT 'å±æ€§å€¼'
     , PRIMARY KEY (`entity_id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'ÉÌÆ·ÀàÄ¿±í'; 
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'å•†å“ç±»ç›®è¡¨'; 
 
 --
---ÉÌÆ·ÊôĞÔ±í
+--å•†å“å±æ€§è¡¨
 --
 DROP TABLE IF EXISTS `jym_b_goods_property`; 
-
 CREATE TABLE `jym_b_goods_property` ( 
-    `entity_id` int (10) NOT NULL AUTO_INCREMENT
-    , `external_goods_id` varchar (50) NOT NULL COMMENT 'Íâ²¿ÉÌÆ·ID'
-    , `property_id` bigint (20) NOT NULL COMMENT 'ÊôĞÔid'
-    , `value_id` bigint (20) NOT NULL COMMENT 'ÊôĞÔÖµid'
-    , `value` varchar (50) DEFAULT NULL COMMENT 'ÊôĞÔÖµ'
+    `entity_id` int(10) NOT NULL AUTO_INCREMENT
+    , `external_goods_id` nvarchar(64) NOT NULL COMMENT 'å¤–éƒ¨å•†å“ID'
+    , `property_id` nvarchar(20) NOT NULL COMMENT 'å±æ€§id'
+    , `value_id` nvarchar(20) NOT NULL COMMENT 'å±æ€§å€¼id'
+    , `value` nvarchar(50) DEFAULT NULL COMMENT 'å±æ€§å€¼'
     , PRIMARY KEY (`entity_id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'ÉÌÆ·ÊôĞÔ±í'; 
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'å•†å“å±æ€§è¡¨'; 
 
 --
---ÉÌÆ·Í¼Æ¬±í
+--å•†å“å›¾ç‰‡è¡¨
 --
 DROP TABLE IF EXISTS `jym_b_goods_images`; 
-
 CREATE TABLE `jym_b_goods_images` ( 
-    `entity_id` int (10) NOT NULL AUTO_INCREMENT
-    , `external_goods_id` varchar (50) NOT NULL COMMENT 'Íâ²¿ÉÌÆ·ID'
-    , `image_id` bigint (20) DEFAULT NULL COMMENT 'Í¼Æ¬id'
-    , `image_url` varchar (255) NOT NULL COMMENT 'ÉÌÆ·Í¼Æ¬url'
-    , `note` varchar (255) NOT NULL COMMENT '±¸×¢'
+    `entity_id` int(10) NOT NULL AUTO_INCREMENT
+    , `external_goods_id` nvarchar(64) NOT NULL COMMENT 'å¤–éƒ¨å•†å“ID'
+    , `image_id` nvarchar(64) DEFAULT NULL COMMENT 'å›¾ç‰‡id'
+    , `image_url` nvarchar(255) NOT NULL COMMENT 'å•†å“å›¾ç‰‡url'
+    , `note` nvarchar(255) DEFAULT NULL COMMENT 'å¤‡æ³¨'
     , PRIMARY KEY (`entity_id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'ÉÌÆ·ÊôĞÔ±í';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'å•†å“å±æ€§è¡¨';
+
+--
+--å•†å“çŠ¶æ€ç®¡ç†è¡¨
+--
+DROP TABLE IF EXISTS `jym_m_goods_status`; 
+CREATE TABLE `jym_m_goods_status` ( 
+    `status_id` int(3) NOT NULL AUTO_INCREMENT
+    , `name` nvarchar(100) NOT NULL COMMENT 'æè¿°'
+    , PRIMARY KEY (`status_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'å•†å“çŠ¶æ€ç®¡ç†è¡¨';
 

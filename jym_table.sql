@@ -4,7 +4,7 @@
 DROP TABLE IF EXISTS `jym_m_batch_hd`; 
 CREATE TABLE `jym_m_batch_hd` ( 
     `external_batch_id` nvarchar(64) NOT NULL COMMENT '外部批次ID'
-    , `batch_id` bigint(20) DEFAULT NULL COMMENT '商品发布批次ID'
+    , `batch_id` nvarchar(20) DEFAULT NULL COMMENT '商品发布批次ID'
     , `succeed` tinyint(1) DEFAULT NULL COMMENT '请求批处理结果'
     , `product_cnt` int(10) DEFAULT NULL COMMENT '发布商品件数'
     , `state_code` nvarchar(25) DEFAULT NULL COMMENT '请求返回状态码'
@@ -12,8 +12,8 @@ CREATE TABLE `jym_m_batch_hd` (
     , `method_id` nvarchar(100) NOT NULL COMMENT 'API接口ID'
     , `status` int(10) DEFAULT NULL COMMENT '任务状态'
     , `reason` nvarchar(255) DEFAULT NULL COMMENT '错误原因'
-    , `create_at` timestamp NULL DEFAULT NULL
-    , `update_at` timestamp NULL DEFAULT NULL
+    , `create_at` datetime NULL DEFAULT NULL
+    , `update_at` datetime NULL DEFAULT NULL
     , PRIMARY KEY (`external_batch_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '批处理记录表'; 
 
@@ -28,8 +28,8 @@ CREATE TABLE `jym_m_batch_dtl` (
     , `status` int(10) NOT NULL COMMENT '子任务状态'
     , `reason` nvarchar(255) DEFAULT NULL COMMENT '子任务状态产生原因'
     , `goods_status` int(4) DEFAULT NULL COMMENT '商品处理状态'
-    , `create_at` timestamp NULL DEFAULT NULL
-    , `update_at` timestamp NULL DEFAULT NULL
+    , `create_at` datetime NULL DEFAULT NULL
+    , `update_at` datetime NULL DEFAULT NULL
     , PRIMARY KEY (`external_batch_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '批处理明细表'; 
 
@@ -61,8 +61,8 @@ CREATE TABLE `jym_m_goods_entity` (
     , `server_info_id` nvarchar(64) NOT NULL COMMENT ''
     , `support_retrieve_compensation` tinyint(1) NOT NULL COMMENT '是否支持找回包赔'
     , `can_bargain` tinyint(1) NOT NULL COMMENT '是否支持议价'
-    , `create_at` timestamp NULL DEFAULT NULL
-    , `update_at` timestamp NULL DEFAULT NULL
+    , `create_at` datetime NULL DEFAULT NULL
+    , `update_at` datetime NULL DEFAULT NULL
     , PRIMARY KEY (`external_goods_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '商品详细表'; 
     

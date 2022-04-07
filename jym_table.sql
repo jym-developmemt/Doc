@@ -72,7 +72,7 @@ CREATE TABLE `jym_m_goods_entity` (
 --
 DROP TABLE IF EXISTS `jym_f_server_info`; 
 CREATE TABLE `jym_f_server_info` ( 
-    `entity_id` nvarchar(64) NOT NULL
+    `id` nvarchar(64) NOT NULL
     , `system` nvarchar(10) DEFAULT NULL COMMENT '系统'
     , `good_type` nvarchar(20) DEFAULT NULL COMMENT '商品类型'
     , `cid` nvarchar(20) DEFAULT NULL COMMENT ''
@@ -84,8 +84,8 @@ CREATE TABLE `jym_f_server_info` (
     , `client_id` nvarchar(20) NOT NULL COMMENT '客户端id'
     , `game_id` nvarchar(10) NOT NULL COMMENT '游戏id'
     , `server_id` nvarchar(20) NOT NULL COMMENT '服务器id'
-    , `server_name` nvarchar(50) NOT NULL COMMENT '服务器名称'
-    , PRIMARY KEY (`entity_id`)
+    , `server_name` nvarchar(50) DEFAULT NULL COMMENT '服务器名称'
+    , PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '商品平台信息表'; 
 
 LOCK TABLES `jym_f_server_info` WRITE;
@@ -97,12 +97,11 @@ UNLOCK TABLES;
 --
 DROP TABLE IF EXISTS `jym_b_seller_goods_property`; 
 CREATE TABLE `jym_b_seller_goods_property` ( 
-    `entity_id` int(10) NOT NULL AUTO_INCREMENT
-    , `external_goods_id` nvarchar(64) NOT NULL COMMENT '外部商品ID'
+    `external_goods_id` nvarchar(64) NOT NULL COMMENT '外部商品ID'
     , `property_id` nvarchar(20) NOT NULL COMMENT '属性id'
-    , `value_id` nvarchar(20) NOT NULL COMMENT '属性值id'
-    , `value` nvarchar(50) DEFAULT NULL COMMENT '属性值'
-    , PRIMARY KEY (`entity_id`)
+    , `value_id` nvarchar(20) DEFAULT NULL COMMENT '属性值id'
+    , `value` nvarchar(50) NOT NULL COMMENT '属性值'
+    , PRIMARY KEY (`external_goods_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '商品类目表'; 
 
 --
@@ -110,12 +109,11 @@ CREATE TABLE `jym_b_seller_goods_property` (
 --
 DROP TABLE IF EXISTS `jym_b_goods_property`; 
 CREATE TABLE `jym_b_goods_property` ( 
-    `entity_id` int(10) NOT NULL AUTO_INCREMENT
-    , `external_goods_id` nvarchar(64) NOT NULL COMMENT '外部商品ID'
+    `external_goods_id` nvarchar(64) NOT NULL COMMENT '外部商品ID'
     , `property_id` nvarchar(20) NOT NULL COMMENT '属性id'
-    , `value_id` nvarchar(20) NOT NULL COMMENT '属性值id'
-    , `value` nvarchar(50) DEFAULT NULL COMMENT '属性值'
-    , PRIMARY KEY (`entity_id`)
+    , `value_id` nvarchar(20) DEFAULT NULL COMMENT '属性值id'
+    , `value` nvarchar(50) NOT NULL COMMENT '属性值'
+    , PRIMARY KEY (`external_goods_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '商品属性表'; 
 
 --
@@ -123,12 +121,11 @@ CREATE TABLE `jym_b_goods_property` (
 --
 DROP TABLE IF EXISTS `jym_b_goods_images`; 
 CREATE TABLE `jym_b_goods_images` ( 
-    `entity_id` int(10) NOT NULL AUTO_INCREMENT
-    , `external_goods_id` nvarchar(64) NOT NULL COMMENT '外部商品ID'
+    `external_goods_id` nvarchar(64) NOT NULL COMMENT '外部商品ID'
     , `image_id` nvarchar(64) DEFAULT NULL COMMENT '图片id'
     , `image_url` nvarchar(255) NOT NULL COMMENT '商品图片url'
     , `note` nvarchar(255) DEFAULT NULL COMMENT '备注'
-    , PRIMARY KEY (`entity_id`)
+    , PRIMARY KEY (`external_goods_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '商品属性表';
 
 --

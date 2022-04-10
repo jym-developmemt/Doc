@@ -4,6 +4,7 @@ appsecret:509582c40e9ae70604bb17f59e374e68
 应用授权等级:2
 回调URL:open.taobao.com
 
+o3nheb8jhiu3kkze
 
 常用工具
 #快速用户授权工具（开发阶段）

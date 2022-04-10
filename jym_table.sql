@@ -30,7 +30,6 @@ CREATE TABLE `jym_m_batch_dtl` (
     , `goods_status` int(4) DEFAULT NULL COMMENT '商品处理状态'
     , `create_at` datetime NULL DEFAULT NULL
     , `update_at` datetime NULL DEFAULT NULL
-    , PRIMARY KEY (`external_batch_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '批处理明细表'; 
 
 --
@@ -101,7 +100,6 @@ CREATE TABLE `jym_b_seller_goods_property` (
     , `property_id` nvarchar(20) NOT NULL COMMENT '属性id'
     , `value_id` nvarchar(20) DEFAULT NULL COMMENT '属性值id'
     , `value` nvarchar(50) NOT NULL COMMENT '属性值'
-    , PRIMARY KEY (`external_goods_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '商品类目表'; 
 
 --
@@ -113,7 +111,6 @@ CREATE TABLE `jym_b_goods_property` (
     , `property_id` nvarchar(20) NOT NULL COMMENT '属性id'
     , `value_id` nvarchar(20) DEFAULT NULL COMMENT '属性值id'
     , `value` nvarchar(50) NOT NULL COMMENT '属性值'
-    , PRIMARY KEY (`external_goods_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '商品属性表'; 
 
 --
@@ -125,7 +122,6 @@ CREATE TABLE `jym_b_goods_images` (
     , `image_id` nvarchar(64) DEFAULT NULL COMMENT '图片id'
     , `image_url` nvarchar(255) NOT NULL COMMENT '商品图片url'
     , `note` nvarchar(255) DEFAULT NULL COMMENT '备注'
-    , PRIMARY KEY (`external_goods_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '商品属性表';
 
 --

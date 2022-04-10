@@ -1,0 +1,47 @@
+为了保证商家利益，账号相关的商品属性，即发布接口的sellerAccountPropertyList字段的值
+要进行AES加密传输，我们这边有进行强制校验，若不经过加密会发布失败
+AES密钥找研发同学对接
+AES加密示例代码:
+public class AESUtil {
+
+    private static final String AES = "AES";
+
+    private final static Logger logger = Logger.getLogger(AESUtil.class);
+
+    public static String decrypt(String content, String aesKey) {
+        if (StringUtils.isBlank(content) || StringUtils.isBlank(aesKey)) {
+            logger.error("[AESUtil.decrypt] encrypt or key is empty");
+            return null;
+        }
+
+        try {
+            byte[] raw = aesKey.getBytes();
+            SecretKeySpec skeySpec = new SecretKeySpec(raw, AES);
+            Cipher cipher = Cipher.getInstance(AES);
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+            return new String(cipher.doFinal(Hex.decodeHex(content.toCharArray())));
+        } catch (Exception e) {
+            logger.error(e, "AESUtil.decryptAES fail, error:[{}]", e.getMessage());
+        }
+        return null;
+    }
+
+    public static String encrypt(String content, String aesKey) {
+
+        if (StringUtils.isBlank(content) || StringUtils.isBlank(aesKey)) {
+            logger.error("[AESUtil.encrypt] encrypt or key is empty");
+            return null;
+        }
+
+        try {
+            byte[] raw = aesKey.getBytes();
+            SecretKeySpec skeySpec = new SecretKeySpec(raw, AES);
+            Cipher cipher = Cipher.getInstance(AES);
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+            return new String(Hex.encodeHex(cipher.doFinal(content.getBytes())));
+        } catch (Exception e) {
+            logger.error(e, "AESUtil.decryptAES fail, error:[{}]", e.getMessage());
+            return null;
+        }
+    }
+}
